@@ -24,6 +24,19 @@ public class Video {
     this.registeredDate = registeredDate;
   }
 
+  public int getLimit() {
+    switch (videoType) {
+      case Video.VHS:
+        return 5;
+      case Video.CD:
+        return 3;
+      case Video.DVD:
+        return 2;
+      default:
+        return 0;
+    }
+  }
+
   public int getLateReturnPointPenalty() {
     int pentalty = 0;
     switch (videoType) {
