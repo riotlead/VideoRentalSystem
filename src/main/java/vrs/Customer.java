@@ -86,10 +86,10 @@ public class Customer {
 
 
         if ( totalPoint >= 10 ) {
-            System.out.println("Congrat! You earned one free coupon");
+            SimpleLogger.Log("Congrat! You earned one free coupon");
         }
         if ( totalPoint >= 30 ) {
-            System.out.println("Congrat! You earned two free coupon");
+            SimpleLogger.Log("Congrat! You earned two free coupon");
         }
         return result ;
     }

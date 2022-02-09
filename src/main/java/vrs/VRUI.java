@@ -31,11 +31,11 @@ public class VRUI {
                 default: break ;
             }
         }
-        System.out.println("Bye");
+        SimpleLogger.Log("Bye");
     }
 
     public void clearRentals() {
-        System.out.println("Enter customer name: ") ;
+        SimpleLogger.Log("Enter customer name: ") ;
         String customerName = scanner.next() ;
 
         Customer foundCustomer = null ;
@@ -47,13 +47,13 @@ public class VRUI {
         }
 
         if ( foundCustomer == null ) {
-            System.out.println("No customer found") ;
+            SimpleLogger.Log("No customer found") ;
         } else {
-            System.out.println("Name: " + foundCustomer.getName() +
+            SimpleLogger.Log("Name: " + foundCustomer.getName() +
                     "\tRentals: " + foundCustomer.getRentals().size()) ;
             for ( Rental rental: foundCustomer.getRentals() ) {
-                System.out.print("\tTitle: " + rental.getVideo().getTitle() + " ") ;
-                System.out.print("\tPrice Code: " + rental.getVideo().getPriceCode()) ;
+                SimpleLogger.LogL("\tTitle: " + rental.getVideo().getTitle() + " ") ;
+                SimpleLogger.LogL("\tPrice Code: " + rental.getVideo().getPriceCode()) ;
             }
 
             List<Rental> rentals = new ArrayList<Rental>() ;
@@ -62,7 +62,7 @@ public class VRUI {
     }
 
     public void returnVideo() {
-        System.out.println("Enter customer name: ") ;
+        SimpleLogger.Log("Enter customer name: ") ;
         String customerName = scanner.next() ;
 
         Customer foundCustomer = null ;
@@ -74,7 +74,7 @@ public class VRUI {
         }
         if ( foundCustomer == null ) return ;
 
-        System.out.println("Enter video title to return: ") ;
+        SimpleLogger.Log("Enter video title to return: ") ;
         String videoTitle = scanner.next() ;
 
         List<Rental> customerRentals = foundCustomer.getRentals() ;
@@ -106,29 +106,29 @@ public class VRUI {
     }
 
     public void listVideos() {
-        System.out.println("List of videos");
+        SimpleLogger.Log("List of videos");
 
         for ( Video video: videos ) {
-            System.out.println("Price code: " + video.getPriceCode() +"\tTitle: " + video.getTitle()) ;
+            SimpleLogger.Log("Price code: " + video.getPriceCode() +"\tTitle: " + video.getTitle()) ;
         }
-        System.out.println("End of list");
+        SimpleLogger.Log("End of list");
     }
 
     public void listCustomers() {
-        System.out.println("List of customers");
+        SimpleLogger.Log("List of customers");
         for ( Customer customer: customers ) {
-            System.out.println("Name: " + customer.getName() +
+            SimpleLogger.Log("Name: " + customer.getName() +
                     "\tRentals: " + customer.getRentals().size()) ;
             for ( Rental rental: customer.getRentals() ) {
-                System.out.print("\tTitle: " + rental.getVideo().getTitle() + " ") ;
-                System.out.print("\tPrice Code: " + rental.getVideo().getPriceCode()) ;
+                SimpleLogger.LogL("\tTitle: " + rental.getVideo().getTitle() + " ") ;
+                SimpleLogger.LogL("\tPrice Code: " + rental.getVideo().getPriceCode()) ;
             }
         }
-        System.out.println("End of list");
+        SimpleLogger.Log("End of list");
     }
 
     public void getCustomerReport() {
-        System.out.println("Enter customer name: ") ;
+        SimpleLogger.Log("Enter customer name: ") ;
         String customerName = scanner.next() ;
 
         Customer foundCustomer = null ;
@@ -140,15 +140,15 @@ public class VRUI {
         }
 
         if ( foundCustomer == null ) {
-            System.out.println("No customer found") ;
+            SimpleLogger.Log("No customer found") ;
         } else {
             String result = foundCustomer.getReport() ;
-            System.out.println(result);
+            SimpleLogger.Log(result);
         }
     }
 
     public void rentVideo() {
-        System.out.println("Enter customer name: ") ;
+        SimpleLogger.Log("Enter customer name: ") ;
         String customerName = scanner.next() ;
 
         Customer foundCustomer = null ;
@@ -161,7 +161,7 @@ public class VRUI {
 
         if ( foundCustomer == null ) return ;
 
-        System.out.println("Enter video title to rent: ") ;
+        SimpleLogger.Log("Enter video title to rent: ") ;
         String videoTitle = scanner.next() ;
 
         Video foundVideo = null ;
@@ -184,19 +184,19 @@ public class VRUI {
 
     public void register(String object) {
         if ( object.equals("customer") ) {
-            System.out.println("Enter customer name: ") ;
+            SimpleLogger.Log("Enter customer name: ") ;
             String name = scanner.next();
             Customer customer = new Customer(name) ;
             customers.add(customer) ;
         }
         else {
-            System.out.println("Enter video title to register: ") ;
+            SimpleLogger.Log("Enter video title to register: ") ;
             String title = scanner.next() ;
 
-            System.out.println("Enter video type( 1 for VHD, 2 for CD, 3 for DVD ):") ;
+            SimpleLogger.Log("Enter video type( 1 for VHD, 2 for CD, 3 for DVD ):") ;
             int videoType = scanner.nextInt();
 
-            System.out.println("Enter price code( 1 for Regular, 2 for New Release ):") ;
+            SimpleLogger.Log("Enter price code( 1 for Regular, 2 for New Release ):") ;
             int priceCode = scanner.nextInt();
 
             Date registeredDate = new Date();
@@ -206,16 +206,16 @@ public class VRUI {
     }
 
     public int showCommand() {
-        System.out.println("\nSelect a command !");
-        System.out.println("\t 0. Quit");
-        System.out.println("\t 1. List customers");
-        System.out.println("\t 2. List videos");
-        System.out.println("\t 3. Register customer");
-        System.out.println("\t 4. Register video");
-        System.out.println("\t 5. Rent video");
-        System.out.println("\t 6. Return video");
-        System.out.println("\t 7. Show customer report");
-        System.out.println("\t 8. Show customer and clear rentals");
+        SimpleLogger.Log("\nSelect a command !");
+        SimpleLogger.Log("\t 0. Quit");
+        SimpleLogger.Log("\t 1. List customers");
+        SimpleLogger.Log("\t 2. List videos");
+        SimpleLogger.Log("\t 3. Register customer");
+        SimpleLogger.Log("\t 4. Register video");
+        SimpleLogger.Log("\t 5. Rent video");
+        SimpleLogger.Log("\t 6. Return video");
+        SimpleLogger.Log("\t 7. Show customer report");
+        SimpleLogger.Log("\t 8. Show customer and clear rentals");
 
         int command = scanner.nextInt() ;
 
