@@ -44,22 +44,10 @@ public class Customer {
         int totalPoint = 0;
 
         for (Rental each : rentals) {
-            double eachCharge = 0;
-            int eachPoint = 0 ;
-            int daysRented = 0;
+            totalCharge += each.calcEachCharge();
+            totalPoint += each.calcEachPoint();
 
-            daysRented = calcDaysRented(each);
-
-            eachCharge = calcEachCharge(each, eachCharge, daysRented);
-
-            eachPoint = calcEachPoint(each, eachPoint, daysRented);
-
-            result += "\t" + each.getVideo().getTitle() + "\tDays rented: " + daysRented + "\tCharge: " + eachCharge
-                    + "\tPoint: " + eachPoint + "\n";
-
-            totalCharge += eachCharge;
-
-            totalPoint += eachPoint ;
+            result += "\t" + each.getReport();
         }
 
         result += "Total charge: " + totalCharge + "\tTotal Point:" + totalPoint + "\n";
@@ -74,40 +62,5 @@ public class Customer {
         return result ;
     }
 
-    private int calcEachPoint(Rental each, int eachPoint, int daysRented) {
-        eachPoint++;
-
-        if ((each.getVideo().getPriceCode() == Video.NEW_RELEASE) )
-            eachPoint++;
-
-        if ( daysRented > each.getDaysRentedLimit() )
-            eachPoint -= Math.min(eachPoint, each.getVideo().getLateReturnPointPenalty()) ;
-        return eachPoint;
-    }
-
-    private double calcEachCharge(Rental each, double eachCharge, int daysRented) {
-        switch (each.getVideo().getPriceCode()) {
-            case Video.REGULAR:
-                eachCharge += 2;
-                if (daysRented > 2)
-                    eachCharge += (daysRented - 2) * 1.5;
-                break;
-            case Video.NEW_RELEASE:
-                eachCharge = daysRented * 3;
-                break;
-        }
-        return eachCharge;
-    }
-
-    private int calcDaysRented(Rental each) {
-        int daysRented;
-        if (each.getStatus() == status.RETURNED) { // returned Video
-            long diff = each.getReturnDate().getTime() - each.getRentDate().getTime();
-            daysRented = (int) (diff / Constant.A_DAY_IN_MILLIS) + 1;
-        } else { // not yet returned
-            long diff = new Date().getTime() - each.getRentDate().getTime();
-            daysRented = (int) (diff / Constant.A_DAY_IN_MILLIS) + 1;
-        }
-        return daysRented;
-    }
+    
 }
