@@ -90,10 +90,10 @@ public class Customer {
 
 
         if ( totalPoint >= 10 ) {
-            SimpleLogger.Log("Congrat! You earned one free coupon");
+            SimpleLogger.log("Congrat! You earned one free coupon");
         }
         if ( totalPoint >= 30 ) {
-            SimpleLogger.Log("Congrat! You earned two free coupon");
+            SimpleLogger.log("Congrat! You earned two free coupon");
         }
         return result ;
     }
