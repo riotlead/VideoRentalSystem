@@ -6,10 +6,7 @@ import java.util.Scanner;
 
 public class VRUI {
     private static final Scanner scanner = new Scanner(System.in) ;
-
-    private final List<Customer> customers = new ArrayList<>() ;
-
-    private final List<Video> videos = new ArrayList<>() ;
+    VideoRentalSystem vrs = new VideoRentalSystem();
 
     public static void main(String[] args) {
         VRUI ui = new VRUI() ;
@@ -21,8 +18,8 @@ public class VRUI {
                 case 0 -> quit = true;
                 case 1 -> ui.listCustomers();
                 case 2 -> ui.listVideos();
-                case 3 -> ui.register("customer");
-                case 4 -> ui.register("video");
+                case 3 -> ui.registerCustomer();
+                case 4 -> ui.registerVideo();
                 case 5 -> ui.rentVideo();
                 case 6 -> ui.returnVideo();
                 case 7 -> ui.getCustomerReport();
@@ -39,21 +36,7 @@ public class VRUI {
         SimpleLogger.log("Enter customer name: ") ;
         String customerName = scanner.next() ;
 
-        Customer foundCustomer = null ;
-        for ( Customer customer: customers ) {
-            if ( customer.getName().equals(customerName)) {
-                foundCustomer = customer ;
-                break ;
-            }
-        }
-
-        if ( foundCustomer == null ) {
-            SimpleLogger.log("No customer found") ;
-        } else {
-            return foundCustomer;
-        }
-
-        return null;
+        return vrs.getCustomer(customerName);
     }
 
     public void clearRentals() {
@@ -67,8 +50,7 @@ public class VRUI {
                 SimpleLogger.logNoNewLine("\tPrice Code: " + rental.getVideo().getPriceCode()) ;
             }
 
-            List<Rental> rentals = new ArrayList<>() ;
-            customer.setRentals(rentals);
+            vrs.clearRentals(customer);
         }
     }
 
@@ -81,46 +63,26 @@ public class VRUI {
         SimpleLogger.log("Enter video title to return: ") ;
         String videoTitle = scanner.next() ;
 
-        List<Rental> customerRentals = customer.getRentals() ;
-        for ( Rental rental: customerRentals ) {
-            if ( rental.getVideo().getTitle().equals(videoTitle) && rental.getVideo().isRented() ) {
-                rental.returnVideo();
-                rental.getVideo().setRented(false);
-                break ;
-            }
-        }
+        vrs.returnVideo(customer, videoTitle);
     }
 
     private void init() {
-        Customer james = new Customer("James") ;
-        Customer brown = new Customer("Brown") ;
-        customers.add(james) ;
-        customers.add(brown) ;
-
-        Video v1 = new Video("v1", Video.CD, Video.REGULAR, new Date()) ;
-        Video v2 = new Video("v2", Video.DVD, Video.NEW_RELEASE, new Date()) ;
-        videos.add(v1) ;
-        videos.add(v2) ;
-
-        Rental r1 = new Rental(v1) ;
-        Rental r2 = new Rental(v2) ;
-
-        james.addRental(r1) ;
-        james.addRental(r2) ;
+        vrs.init();
     }
 
     public void listVideos() {
         SimpleLogger.log("List of videos");
 
-        for ( Video video: videos ) {
+        for ( Video video: vrs.getVideos() ) {
             SimpleLogger.log("Price code: " + video.getPriceCode() +"\tTitle: " + video.getTitle()) ;
         }
+
         SimpleLogger.log("End of list");
     }
 
     public void listCustomers() {
         SimpleLogger.log("List of customers");
-        for ( Customer customer: customers ) {
+        for ( Customer customer: vrs.getCustomers() ) {
             SimpleLogger.log("Name: " + customer.getName() +
                     "\tRentals: " + customer.getRentals().size()) ;
             for ( Rental rental: customer.getRentals() ) {
@@ -146,45 +108,26 @@ public class VRUI {
         SimpleLogger.log("Enter video title to rent: ") ;
         String videoTitle = scanner.next() ;
 
-        Video foundVideo = null ;
-        for ( Video video: videos ) {
-            if ( video.getTitle().equals(videoTitle) && !video.isRented()) {
-                foundVideo = video ;
-                break ;
-            }
-        }
-
-        if ( foundVideo == null ) return ;
-
-        Rental rental = new Rental(foundVideo) ;
-        foundVideo.setRented(true);
-
-        List<Rental> customerRentals = customer.getRentals() ;
-        customerRentals.add(rental);
-        customer.setRentals(customerRentals);
+        vrs.rentVideo(customer, videoTitle);
     }
 
-    public void register(String object) {
-        if ( object.equals("customer") ) {
-            SimpleLogger.log("Enter customer name: ") ;
-            String name = scanner.next();
-            Customer customer = new Customer(name) ;
-            customers.add(customer) ;
-        }
-        else {
-            SimpleLogger.log("Enter video title to register: ") ;
-            String title = scanner.next() ;
+    public void registerCustomer() {
+        SimpleLogger.log("Enter customer name: ");
+        String name = scanner.next();
+        vrs.registerCustomer(name);
+    }
 
-            SimpleLogger.log("Enter video type( 1 for VHD, 2 for CD, 3 for DVD ):") ;
-            int videoType = scanner.nextInt();
+    public void registerVideo() {
+        SimpleLogger.log("Enter video title to register: ") ;
+        String title = scanner.next() ;
 
-            SimpleLogger.log("Enter price code( 1 for Regular, 2 for New Release ):") ;
-            int priceCode = scanner.nextInt();
+        SimpleLogger.log("Enter video type( 1 for VHD, 2 for CD, 3 for DVD ):") ;
+        int videoType = scanner.nextInt();
 
-            Date registeredDate = new Date();
-            Video video = new Video(title, videoType, priceCode, registeredDate) ;
-            videos.add(video) ;
-        }
+        SimpleLogger.log("Enter price code( 1 for Regular, 2 for New Release ):") ;
+        int priceCode = scanner.nextInt();
+
+        vrs.registerVideo(title, videoType, priceCode);
     }
 
     public int showCommand() {
