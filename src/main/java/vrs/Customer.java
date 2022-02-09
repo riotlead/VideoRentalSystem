@@ -9,7 +9,7 @@ public class Customer {
     private Rental.Status status;
     private String name;
 
-    private List<Rental> rentals = new ArrayList<Rental>();
+    private List<Rental> rentals = new ArrayList<>();
 
     public Customer(String name) {
         this.setName(name);
@@ -41,8 +41,6 @@ public class Customer {
     public String getReport() {
         String result = "Customer Report for " + getName() + "\n";
 
-        List<Rental> rentals = getRentals();
-
         double totalCharge = 0;
         int totalPoint = 0;
 
@@ -69,10 +67,10 @@ public class Customer {
 
 
         if ( totalPoint >= 10 ) {
-            System.out.println("Congrat! You earned one free coupon");
+            SimpleLogger.log("Congrat! You earned one free coupon");
         }
         if ( totalPoint >= 30 ) {
-            System.out.println("Congrat! You earned two free coupon");
+            SimpleLogger.log("Congrat! You earned two free coupon");
         }
         return result ;
     }
