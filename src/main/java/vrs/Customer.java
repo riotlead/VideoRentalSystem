@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 public class Customer {
-    public static final int A_DAY_IN_MILLIS = (1000 * 60 * 60 * 24);
     private Rental.Status status;
     private String name;
 
@@ -104,10 +103,10 @@ public class Customer {
         int daysRented;
         if (each.getStatus() == status.RETURNED) { // returned Video
             long diff = each.getReturnDate().getTime() - each.getRentDate().getTime();
-            daysRented = (int) (diff / A_DAY_IN_MILLIS) + 1;
+            daysRented = (int) (diff / Constant.A_DAY_IN_MILLIS) + 1;
         } else { // not yet returned
             long diff = new Date().getTime() - each.getRentDate().getTime();
-            daysRented = (int) (diff / A_DAY_IN_MILLIS) + 1;
+            daysRented = (int) (diff / Constant.A_DAY_IN_MILLIS) + 1;
         }
         return daysRented;
     }
