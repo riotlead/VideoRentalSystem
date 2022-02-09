@@ -38,7 +38,6 @@ public class Customer {
 
     // Primitive Obession - Magic Number 남용
     // Long Method
-    // SRP 위반
     public String getReport() {
         String result = "Customer Report for " + getName() + "\n";
 
@@ -50,29 +49,11 @@ public class Customer {
             int eachPoint = 0 ;
             int daysRented = 0;
 
-            if (each.getStatus() == status.RETURNED) { // returned Video
-                long diff = each.getReturnDate().getTime() - each.getRentDate().getTime();
-                daysRented = (int) (diff / A_DAY_IN_MILLIS) + 1;
-            } else { // not yet returned
-                long diff = new Date().getTime() - each.getRentDate().getTime();
-                daysRented = (int) (diff / A_DAY_IN_MILLIS) + 1;
-            }
+            daysRented = calcDaysRented(each);
 
-            if (each.getVideo().getPriceCode() == Video.REGULAR) {
-                eachCharge += 2;
-                if (daysRented > 2)
-                    eachCharge += (daysRented - 2) * 1.5;
-            } else if (each.getVideo().getPriceCode() == Video.NEW_RELEASE) {
-                eachCharge = daysRented * 3;
-            }
+            eachCharge = calcEachCharge(each, eachCharge, daysRented);
 
-            eachPoint++;
-
-            if ((each.getVideo().getPriceCode() == Video.NEW_RELEASE) )
-                eachPoint++;
-
-            if ( daysRented > each.getDaysRentedLimit() )
-                eachPoint -= Math.min(eachPoint, each.getVideo().getLateReturnPointPenalty()) ;
+            eachPoint = calcEachPoint(each, eachPoint, daysRented);
 
             result += "\t" + each.getVideo().getTitle() + "\tDays rented: " + daysRented + "\tCharge: " + eachCharge
                     + "\tPoint: " + eachPoint + "\n";
@@ -92,5 +73,42 @@ public class Customer {
             SimpleLogger.log("Congrat! You earned two free coupon");
         }
         return result ;
+    }
+
+    private int calcEachPoint(Rental each, int eachPoint, int daysRented) {
+        eachPoint++;
+
+        if ((each.getVideo().getPriceCode() == Video.NEW_RELEASE) )
+            eachPoint++;
+
+        if ( daysRented > each.getDaysRentedLimit() )
+            eachPoint -= Math.min(eachPoint, each.getVideo().getLateReturnPointPenalty()) ;
+        return eachPoint;
+    }
+
+    private double calcEachCharge(Rental each, double eachCharge, int daysRented) {
+        switch (each.getVideo().getPriceCode()) {
+            case Video.REGULAR:
+                eachCharge += 2;
+                if (daysRented > 2)
+                    eachCharge += (daysRented - 2) * 1.5;
+                break;
+            case Video.NEW_RELEASE:
+                eachCharge = daysRented * 3;
+                break;
+        }
+        return eachCharge;
+    }
+
+    private int calcDaysRented(Rental each) {
+        int daysRented;
+        if (each.getStatus() == status.RETURNED) { // returned Video
+            long diff = each.getReturnDate().getTime() - each.getRentDate().getTime();
+            daysRented = (int) (diff / A_DAY_IN_MILLIS) + 1;
+        } else { // not yet returned
+            long diff = new Date().getTime() - each.getRentDate().getTime();
+            daysRented = (int) (diff / A_DAY_IN_MILLIS) + 1;
+        }
+        return daysRented;
     }
 }
