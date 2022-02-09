@@ -7,7 +7,7 @@ public class Rental {
 
   public enum Status {
     RENTED, RETURNED
-  };
+  }
 
   private Status status;
   private Date rentDate;
@@ -22,7 +22,8 @@ public class Rental {
     status = Status.RENTED;
     rentDate = new Date();
     charge = 0;
-    point = 0;
+    point = 1;
+    daysRented = 0;
   }
 
   public Video getVideo() {
@@ -80,11 +81,11 @@ public class Rental {
   }
 
   private int calcDaysRented() {
-    if (getStatus() == status.RETURNED) { // returned Video
-      long diff = getReturnDate().getTime() - getRentDate().getTime();
+    if (status == Status.RETURNED) { // returned Video
+      long diff = returnDate.getTime() - returnDate.getTime();
       daysRented = (int) (diff / Constant.A_DAY_IN_MILLIS) + 1;
     } else { // not yet returned
-      long diff = new Date().getTime() - getRentDate().getTime();
+      long diff = new Date().getTime() - returnDate.getTime();
       daysRented = (int) (diff / Constant.A_DAY_IN_MILLIS) + 1;
     }
     return daysRented;
@@ -109,10 +110,8 @@ public class Rental {
   public int calcEachPoint() {
     calcDaysRented();
 
-    point++;
-
     if ((video.getPriceCode() == Video.NEW_RELEASE))
-      point++;
+      point += 1;
 
     if (daysRented > getDaysRentedLimit())
       point -= Math.min(point, video.getLateReturnPointPenalty());

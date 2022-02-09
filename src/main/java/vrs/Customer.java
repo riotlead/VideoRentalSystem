@@ -1,11 +1,9 @@
 package vrs;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Customer {
-    private Rental.Status status;
     private String name;
 
     private List<Rental> rentals = new ArrayList<>();
@@ -46,12 +44,10 @@ public class Customer {
         for (Rental each : rentals) {
             totalCharge += each.calcEachCharge();
             totalPoint += each.calcEachPoint();
-
             result += "\t" + each.getReport();
         }
 
         result += "Total charge: " + totalCharge + "\tTotal Point:" + totalPoint + "\n";
-
 
         if ( totalPoint >= 10 ) {
             SimpleLogger.log("Congrat! You earned one free coupon");
