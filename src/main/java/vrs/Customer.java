@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Customer {
+    public static final int A_DAY_IN_MILLIS = (1000 * 60 * 60 * 24);
     private String name;
 
     private List<Rental> rentals = new ArrayList<Rental>();
@@ -34,6 +35,9 @@ public class Customer {
 
     }
 
+    // Primitive Obession - Magic Number 남용
+    // Long Method
+    // SRP 위반
     public String getReport() {
         String result = "Customer Report for " + getName() + "\n";
 
@@ -49,10 +53,10 @@ public class Customer {
 
             if (each.getStatus() == 1) { // returned Video
                 long diff = each.getReturnDate().getTime() - each.getRentDate().getTime();
-                daysRented = (int) (diff / (1000 * 60 * 60 * 24)) + 1;
+                daysRented = (int) (diff / A_DAY_IN_MILLIS) + 1;
             } else { // not yet returned
                 long diff = new Date().getTime() - each.getRentDate().getTime();
-                daysRented = (int) (diff / (1000 * 60 * 60 * 24)) + 1;
+                daysRented = (int) (diff / A_DAY_IN_MILLIS) + 1;
             }
 
             switch (each.getVideo().getPriceCode()) {
