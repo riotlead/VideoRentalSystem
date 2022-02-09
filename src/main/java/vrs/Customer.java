@@ -9,7 +9,7 @@ public class Customer {
     private Rental.Status status;
     private String name;
 
-    private List<Rental> rentals = new ArrayList<Rental>();
+    private List<Rental> rentals = new ArrayList<>();
 
     public Customer(String name) {
         this.setName(name);
@@ -42,8 +42,6 @@ public class Customer {
     public String getReport() {
         String result = "Customer Report for " + getName() + "\n";
 
-        List<Rental> rentals = getRentals();
-
         double totalCharge = 0;
         int totalPoint = 0;
 
@@ -60,15 +58,12 @@ public class Customer {
                 daysRented = (int) (diff / A_DAY_IN_MILLIS) + 1;
             }
 
-            switch (each.getVideo().getPriceCode()) {
-                case Video.REGULAR:
-                    eachCharge += 2;
-                    if (daysRented > 2)
-                        eachCharge += (daysRented - 2) * 1.5;
-                    break;
-                case Video.NEW_RELEASE:
-                    eachCharge = daysRented * 3;
-                    break;
+            if (each.getVideo().getPriceCode() == Video.REGULAR) {
+                eachCharge += 2;
+                if (daysRented > 2)
+                    eachCharge += (daysRented - 2) * 1.5;
+            } else if (each.getVideo().getPriceCode() == Video.NEW_RELEASE) {
+                eachCharge = daysRented * 3;
             }
 
             eachPoint++;
