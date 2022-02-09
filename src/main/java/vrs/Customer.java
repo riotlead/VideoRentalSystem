@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Customer {
     public static final int A_DAY_IN_MILLIS = (1000 * 60 * 60 * 24);
+    private Rental.Status status;
     private String name;
 
     private List<Rental> rentals = new ArrayList<Rental>();
@@ -51,7 +52,7 @@ public class Customer {
             int eachPoint = 0 ;
             int daysRented = 0;
 
-            if (each.getStatus() == 1) { // returned Video
+            if (each.getStatus() == status.RETURNED) { // returned Video
                 long diff = each.getReturnDate().getTime() - each.getRentDate().getTime();
                 daysRented = (int) (diff / A_DAY_IN_MILLIS) + 1;
             } else { // not yet returned
