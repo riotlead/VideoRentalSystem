@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class VRUI {
-    private static Scanner scanner = new Scanner(System.in) ;
+    private static final Scanner scanner = new Scanner(System.in) ;
 
-    private List<Customer> customers = new ArrayList<Customer>() ;
+    private final List<Customer> customers = new ArrayList<>() ;
 
-    private List<Video> videos = new ArrayList<Video>() ;
+    private final List<Video> videos = new ArrayList<>() ;
 
     public static void main(String[] args) {
         VRUI ui = new VRUI() ;
@@ -17,18 +17,19 @@ public class VRUI {
         boolean quit = false ;
         while ( ! quit ) {
             int command = ui.showCommand() ;
-            switch ( command ) {
-                case 0: quit = true ; break ;
-                case 1: ui.listCustomers() ; break ;
-                case 2: ui.listVideos() ; break ;
-                case 3: ui.register("customer") ; break ;
-                case 4: ui.register("video") ; break ;
-                case 5: ui.rentVideo() ; break ;
-                case 6: ui.returnVideo() ; break ;
-                case 7: ui.getCustomerReport() ; break;
-                case 8: ui.clearRentals() ; break ;
-                case -1: ui.init() ; break ;
-                default: break ;
+            switch (command) {
+                case 0 -> quit = true;
+                case 1 -> ui.listCustomers();
+                case 2 -> ui.listVideos();
+                case 3 -> ui.register("customer");
+                case 4 -> ui.register("video");
+                case 5 -> ui.rentVideo();
+                case 6 -> ui.returnVideo();
+                case 7 -> ui.getCustomerReport();
+                case 8 -> ui.clearRentals();
+                case -1 -> ui.init();
+                default -> {
+                }
             }
         }
         SimpleLogger.Log("Bye");
@@ -56,7 +57,7 @@ public class VRUI {
                 SimpleLogger.LogL("\tPrice Code: " + rental.getVideo().getPriceCode()) ;
             }
 
-            List<Rental> rentals = new ArrayList<Rental>() ;
+            List<Rental> rentals = new ArrayList<>() ;
             foundCustomer.setRentals(rentals);
         }
     }
@@ -166,7 +167,7 @@ public class VRUI {
 
         Video foundVideo = null ;
         for ( Video video: videos ) {
-            if ( video.getTitle().equals(videoTitle) && video.isRented() == false ) {
+            if ( video.getTitle().equals(videoTitle) && !video.isRented()) {
                 foundVideo = video ;
                 break ;
             }
@@ -217,9 +218,6 @@ public class VRUI {
         SimpleLogger.Log("\t 7. Show customer report");
         SimpleLogger.Log("\t 8. Show customer and clear rentals");
 
-        int command = scanner.nextInt() ;
-
-        return command ;
-
+        return scanner.nextInt();
     }
 }
